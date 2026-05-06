@@ -51,7 +51,7 @@ public class FilmeService {
         existente.setDiretor(diretor);
         existente.setAno(dto.ano());
         existente.setDuracao(dto.duracao());
-        existente.setNota(dto.nota());
+
 
         Filme atualizado = repository.save(existente);
         return toResponseDTO(atualizado);
@@ -65,7 +65,7 @@ public class FilmeService {
         filme.setDiretor(diretor);
         filme.setAno(dto.ano());
         filme.setDuracao(dto.duracao());
-        filme.setNota(dto.nota());
+
         return filme;
     }
 
@@ -75,7 +75,9 @@ public class FilmeService {
                 filme.getTitulo(),
                 filme.getDiretor().getIdDiretor(),
                 filme.getDiretor().getNome(),
-                filme.getNota());
+                calcularMediaAvaliacoes(filme);
+
+
     }
 
     public List<FilmeResponseDTO> listarFilmesPorDiretor(Long idDiretor) {
