@@ -23,5 +23,9 @@ public class Filme {
     @JoinColumn(name = "idDiretor")
     private Diretor diretor;
 
+
+    @OneToMany(mappedBy = "filme")
+    private List<Avaliacao> avaliacoes = new ArrayList<>();
+    
     public Filme(){}
 }
