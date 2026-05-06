@@ -15,35 +15,35 @@ public class FilmeService {
     private final FilmeRepository repository;
     private final DiretorService diretorService;
 
-    public FilmeService(FilmeRepository repository, DiretorService diretorService){
+    public FilmeService(FilmeRepository repository, DiretorService diretorService) {
         this.repository = repository;
         this.diretorService = diretorService;
     }
 
-    public FilmeResponseDTO salvar(FilmeRequestDTO dto){
+    public FilmeResponseDTO salvar(FilmeRequestDTO dto) {
         Filme filme = toEntity(dto);
         Filme salvo = repository.save(filme);
         return toResponseDTO(salvo);
     }
 
-    public FilmeResponseDTO buscarId(Long idFilme){
+    public FilmeResponseDTO buscarId(Long idFilme) {
         Filme filme = repository.findById(idFilme).orElseThrow(() -> new RuntimeException("Filme não encontrado"));
         return toResponseDTO(filme);
     }
 
-    public List<FilmeResponseDTO> listar(){
+    public List<FilmeResponseDTO> listar() {
         return repository.findAll()
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
     }
 
-    public void deletar(Long idFilme){
+    public void deletar(Long idFilme) {
         Filme filme = repository.findById(idFilme).orElseThrow(() -> new RuntimeException("Filme não encontrado"));
         repository.delete(filme);
     }
 
-    public FilmeResponseDTO atualizar(Long idFilme, FilmeRequestDTO dto){
+    public FilmeResponseDTO atualizar(Long idFilme, FilmeRequestDTO dto) {
         Filme existente = repository.findById(idFilme).orElseThrow(() -> new RuntimeException("Filme não encontrado"));
         Diretor diretor = diretorService.buscarEntidade(dto.idDiretor());
         existente.setTitulo(dto.titulo());
@@ -57,7 +57,7 @@ public class FilmeService {
         return toResponseDTO(atualizado);
     }
 
-    private Filme toEntity(FilmeRequestDTO dto){
+    private Filme toEntity(FilmeRequestDTO dto) {
         Diretor diretor = diretorService.buscarEntidade(dto.idDiretor());
         Filme filme = new Filme();
         filme.setTitulo(dto.titulo());
@@ -69,12 +69,20 @@ public class FilmeService {
         return filme;
     }
 
-    private FilmeResponseDTO toResponseDTO(Filme filme){
+    private FilmeResponseDTO toResponseDTO(Filme filme) {
         return new FilmeResponseDTO(
                 filme.getIdFilme(),
                 filme.getTitulo(),
                 filme.getDiretor().getIdDiretor(),
                 filme.getDiretor().getNome(),
                 filme.getNota());
+    }
+
+    public List<FilmeResponseDTO> listarFilmesPorDiretor(Long idDiretor) {
+        diretorService.buscarEntidade(idDiretor);
+        return repository.findByDiretorIdDiretor    (idDiretor)
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 }
