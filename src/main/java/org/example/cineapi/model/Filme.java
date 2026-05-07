@@ -29,14 +29,6 @@ public class Filme {
     private List<Avaliacao> avaliacaes = new ArrayList<>();
     public Filme(){}
 
-    private Double calcularMediaAvaliacoes(Filme filme) {
-        if (filme.getAvaliacaes() == null || filme.getAvaliacaes().isEmpty()){
-            return  0.0;
-        }
-        return  filme.getAvaliacaes()
-                .stream()
-                .mapToInt(Avaliacao::getNota)
-                .average().orElse(0.0);
-    }
+
 }
 

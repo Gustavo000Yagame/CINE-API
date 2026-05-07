@@ -2,6 +2,7 @@ package org.example.cineapi.service;
 
 import org.example.cineapi.dto.FilmeRequestDTO;
 import org.example.cineapi.dto.FilmeResponseDTO;
+import org.example.cineapi.model.Avaliacao;
 import org.example.cineapi.model.Diretor;
 import org.example.cineapi.model.Filme;
 import org.example.cineapi.repository.DiretorRepository;
@@ -75,7 +76,9 @@ public class FilmeService {
                 filme.getTitulo(),
                 filme.getDiretor().getIdDiretor(),
                 filme.getDiretor().getNome(),
-                calcularMediaAvaliacoes(filme);
+                filme.getAno(),
+                calcularMediaAvaliacoes(filme)
+        );
 
 
     }
@@ -86,5 +89,15 @@ public class FilmeService {
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
+    }
+
+    private Double calcularMediaAvaliacoes(Filme filme) {
+        if (filme.getAvaliacaes() == null || filme.getAvaliacaes().isEmpty()){
+            return  0.0;
+        }
+        return  filme.getAvaliacaes()
+                .stream()
+                .mapToInt(Avaliacao::getNota)
+                .average().orElse(0.0);
     }
 }
