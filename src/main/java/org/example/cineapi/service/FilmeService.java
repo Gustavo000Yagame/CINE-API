@@ -75,10 +75,10 @@ public class FilmeService {
                 filme.getTitulo(),
                 filme.getDiretor().getIdDiretor(),
                 filme.getDiretor().getNome(),
-                calcularMediaAvaliacoes(filme);
+                filme.getAno(),
+                calcularMediaAvaliacoes(filme)
+        );
 
-
-    }
 
     public List<FilmeResponseDTO> listarFilmesPorDiretor(Long idDiretor) {
         diretorService.buscarEntidade(idDiretor);
